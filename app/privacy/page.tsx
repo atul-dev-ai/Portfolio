@@ -1,278 +1,241 @@
+"use client";
+
+import React, { useEffect, useState } from "react";
+import { motion, useScroll, useSpring } from "framer-motion";
+
 export default function PrivacyPage() {
+  // ১. স্ক্রল প্রগ্রেস বার লজিক
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001,
+  });
+
+  const sections = [
+    { id: "intro", title: "Introduction" },
+    { id: "collect", title: "Information Collection" },
+    { id: "usage", title: "Data Usage" },
+    { id: "cookies", title: "Cookies & Tracking" },
+    { id: "thirdparty", title: "Third-Party Services" },
+    { id: "security", title: "Data Security" },
+    { id: "rights", title: "Your Rights" },
+    { id: "contact", title: "Contact Us" },
+  ];
+
   return (
-    <div className="container mx-auto px-6 md:px-12 max-w-4xl pt-32 pb-12 space-y-12">
-      {/* Header Section */}
-      <div className="space-y-4 border-b border-primary/10 pb-10 text-center md:text-left">
-        <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight text-foreground">
-          Privacy <span className="text-primary">Policy</span>
-        </h1>
-        <p className="text-muted-foreground text-lg">
-          Last Updated:{" "}
-          <span className="font-semibold text-foreground">
-            February 10, 2026
-          </span>
-        </p>
-        <p className="max-w-2xl text-base leading-relaxed">
-          Your privacy is of paramount importance to me. This document details
-          the types of personal information received and collected by this
-          portfolio and how it is used.
-        </p>
-      </div>
+    <div className="relative min-h-screen bg-background">
+      {/* ২. স্ক্রল প্রগ্রেস বার (একদম উপরে থাকবে) */}
+      <motion.div
+        className="fixed top-0 left-0 right-0 h-1 bg-primary origin-left z-[100]"
+        style={{ scaleX }}
+      />
 
-      <div className="space-y-12 text-lg leading-relaxed text-muted-foreground">
-        {/* 1. Comprehensive Data Collection */}
-        <section className="space-y-5">
-          <div className="flex items-center gap-4">
-            <span className="bg-primary/10 text-primary h-8 w-8 flex items-center justify-center rounded-full text-sm font-bold">
-              01
-            </span>
-            <h2 className="text-2xl font-bold text-foreground">
-              Detailed Information Collection
-            </h2>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
-            <div className="p-5 border border-primary/10 rounded-2xl bg-muted/30">
-              <h3 className="font-bold text-foreground mb-2">
-                Direct Submissions
+      <div className="container mx-auto px-6 md:px-12 max-w-7xl pt-32 pb-20">
+        <div className="flex flex-col lg:flex-row gap-16">
+          {/* ৩. স্টিকি টেবিল অফ কন্টেন্টস (ডেস্কটপের জন্য) */}
+          <aside className="hidden lg:block w-64 shrink-0">
+            <div className="sticky top-32 space-y-6 border-l border-primary/10 pl-6">
+              <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-primary">
+                Contents
               </h3>
-              <p className="text-sm">
-                When you interact with the <strong>Contact Form</strong> or use
-                the dashboard, I collect your name, email address,
-                and any specific inquiry data you provide. This data is stored
-                securely to facilitate communication.
-              </p>
+              <nav className="flex flex-col gap-4">
+                {sections.map((section) => (
+                  <a
+                    key={section.id}
+                    href={`#${section.id}`}
+                    className="text-sm text-muted-foreground hover:text-primary transition-all duration-300"
+                  >
+                    {section.title}
+                  </a>
+                ))}
+              </nav>
             </div>
-            <div className="p-5 border border-primary/10 rounded-2xl bg-muted/30">
-              <h3 className="font-bold text-foreground mb-2">
-                Authentication Logs
-              </h3>
-              <p className="text-sm">
-                Through **Supabase Auth**, I collect metadata including sign-up
-                dates, last login timestamps, and unique user IDs (UUIDs). This
-                is necessary to manage your account and protect against
-                unauthorized access.
+          </aside>
+
+          {/* ৪. বিস্তারিত কন্টেন্ট সেকশন */}
+          <main className="flex-1 space-y-20 max-w-3xl">
+            <header className="space-y-6">
+              <h1 className="text-5xl md:text-7xl font-black tracking-tighter text-foreground">
+                Privacy <span className="text-primary">Policy.</span>
+              </h1>
+              <p className="text-xl text-muted-foreground leading-relaxed">
+                আপনার তথ্যের সুরক্ষা আমার কাছে অত্যন্ত গুরুত্বপূর্ণ। আমি কিভাবে
+                আপনার ডাটা সংগ্রহ ও ব্যবহার করি তার বিস্তারিত বিবরণ নিচে দেওয়া
+                হলো।
               </p>
-            </div>
-          </div>
-        </section>
+            </header>
 
-        {/* 2. Automated Tracking & Cookies */}
-        <section className="space-y-5">
-          <div className="flex items-center gap-4">
-            <span className="bg-primary/10 text-primary h-8 w-8 flex items-center justify-center rounded-full text-sm font-bold">
-              02
-            </span>
-            <h2 className="text-2xl font-bold text-foreground">
-              Cookies & Tracking Technologies
-            </h2>
-          </div>
-          <p>
-            This website uses cookies and similar storage technologies (like
-            LocalStorage) to improve your experience:
-          </p>
-          <ul className="list-disc pl-6 space-y-3 marker:text-primary">
-            <li>
-              <strong>Preference Cookies:</strong> To remember your theme
-              preference (Dark Mode vs Light Mode).
-            </li>
-            <li>
-              <strong>Session Cookies:</strong> To keep you logged in to the
-              dashboard via Supabase.
-            </li>
-            <li>
-              <strong>Analytics:</strong> I may use anonymized IP addresses to
-              track site traffic and performance through Vercel Analytics.
-            </li>
-          </ul>
-        </section>
+            {/* --- Section 1: Intro --- */}
+            <section id="intro" className="scroll-mt-32 space-y-6">
+              <h2 className="text-3xl font-bold text-foreground">
+                01. Introduction
+              </h2>
+              <div className="space-y-4 text-muted-foreground leading-relaxed text-lg text-justify">
+                <p>
+                  Welcome to the official portfolio of **Atul Paul**. I am
+                  committed to protecting your personal information and your
+                  right to privacy. In this document, I describe my privacy
+                  policy in the clearest way possible.
+                </p>
+                <p>
+                  This policy applies to all information collected through our
+                  website (atulpaul.vercel.app), and/or any related services,
+                  sales, marketing, or events. Please read this privacy notice
+                  carefully as it will help you understand what I do with the
+                  information I collect.
+                </p>
+              </div>
+            </section>
 
-        {/* 3. Legal Basis for Processing */}
-        <section className="space-y-5">
-          <div className="flex items-center gap-4">
-            <span className="bg-primary/10 text-primary h-8 w-8 flex items-center justify-center rounded-full text-sm font-bold">
-              03
-            </span>
-            <h2 className="text-2xl font-bold text-foreground">
-              Legal Basis for Processing Data
-            </h2>
-          </div>
-          <p>
-            I process your personal data under the following legal frameworks:
-          </p>
-          <div className="space-y-3 bg-primary/5 p-6 rounded-xl border-l-4 border-primary">
-            <p>
-              <strong>Consent:</strong> When you voluntarily submit a form or
-              register an account.
-            </p>
-            <p>
-              <strong>Contractual Necessity:</strong> To provide the specific
-              services you requested (e.g., account management).
-            </p>
-            <p>
-              <strong>Legitimate Interests:</strong> To secure the website
-              against cyber threats and optimize performance.
-            </p>
-          </div>
-        </section>
+            {/* --- Section 2: Collection --- */}
+            <section id="collect" className="scroll-mt-32 space-y-6">
+              <h2 className="text-3xl font-bold text-foreground">
+                02. Information Collection
+              </h2>
+              <div className="space-y-4 text-muted-foreground leading-relaxed text-lg">
+                <p>
+                  I collect personal information that you voluntarily provide to
+                  me when you:
+                </p>
+                <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 list-none pl-0">
+                  <li className="bg-muted/50 p-4 rounded-xl border border-primary/5">
+                    ✅ Register on the Website
+                  </li>
+                  <li className="bg-muted/50 p-4 rounded-xl border border-primary/5">
+                    ✅ Express interest in my projects
+                  </li>
+                  <li className="bg-muted/50 p-4 rounded-xl border border-primary/5">
+                    ✅ Use the LifeFlow Dashboard
+                  </li>
+                  <li className="bg-muted/50 p-4 rounded-xl border border-primary/5">
+                    ✅ Contact me via Form
+                  </li>
+                </ul>
+                <p>
+                  Specifically, through **Supabase Auth**, I store your unique
+                  User ID, email, and last login time to manage your secure
+                  session.
+                </p>
+              </div>
+            </section>
 
-        {/* 4. Third-Party Data Disclosures */}
-        <section className="space-y-5">
-          <div className="flex items-center gap-4">
-            <span className="bg-primary/10 text-primary h-8 w-8 flex items-center justify-center rounded-full text-sm font-bold">
-              04
-            </span>
-            <h2 className="text-2xl font-bold text-foreground">
-              Third-Party Service Providers
-            </h2>
-          </div>
-          <p>
-            I do not sell your data. However, certain third-party services are
-            essential for the operation of this site:
-          </p>
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm text-left border-collapse">
-              <thead>
-                <tr className="border-b border-primary/20">
-                  <th className="py-3 font-bold text-foreground">Service</th>
-                  <th className="py-3 font-bold text-foreground">Purpose</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-primary/10">
-                <tr>
-                  <td className="py-3">Supabase</td>
-                  <td className="py-3">
-                    Database & Authentication management.
-                  </td>
-                </tr>
-                <tr>
-                  <td className="py-3">Vercel</td>
-                  <td className="py-3">
-                    Hosting, SSL encryption, and Edge functions.
-                  </td>
-                </tr>
-                <tr>
-                  <td className="py-3">Resend</td>
-                  <td className="py-3">
-                    Secure email delivery of contact form submissions.
-                  </td>
-                </tr>
-                <tr>
-                  <td className="py-3">GitHub</td>
-                  <td className="py-3">
-                    Authentication (if using OAuth) and code hosting.
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </section>
+            {/* --- Section 3: Usage --- */}
+            <section id="usage" className="scroll-mt-32 space-y-6">
+              <h2 className="text-3xl font-bold text-foreground">
+                03. How I Use Data
+              </h2>
+              <p className="text-muted-foreground text-lg leading-relaxed">
+                I use personal information collected via our Website for a
+                variety of business purposes described below:
+              </p>
+              <ul className="list-disc pl-6 space-y-3 marker:text-primary text-muted-foreground">
+                <li>
+                  <strong>To facilitate account creation:</strong> Managing the
+                  login process via Supabase.
+                </li>
+                <li>
+                  <strong>To send administrative information:</strong> Updating
+                  you on project changes or terms.
+                </li>
+                <li>
+                  <strong>To protect our Services:</strong> Keeping the site
+                  safe from bots and fraud.
+                </li>
+                <li>
+                  <strong>To respond to legal requests:</strong> Complying with
+                  law enforcement if necessary.
+                </li>
+              </ul>
+            </section>
 
-        {/* 5. Data Retention Policy */}
-        <section className="space-y-5">
-          <div className="flex items-center gap-4">
-            <span className="bg-primary/10 text-primary h-8 w-8 flex items-center justify-center rounded-full text-sm font-bold">
-              05
-            </span>
-            <h2 className="text-2xl font-bold text-foreground">
-              Data Retention & Deletion
-            </h2>
-          </div>
-          <p>I keep your information only as long as necessary:</p>
-          <ul className="list-disc pl-6 space-y-2 marker:text-primary">
-            <li>
-              <strong>Contact messages:</strong> Retained for 12 months for
-              record-keeping purposes.
-            </li>
-            <li>
-              <strong>Account data:</strong> Retained as long as your account is
-              active. You may request deletion at any time.
-            </li>
-            <li>
-              <strong>Server logs:</strong> Automatically deleted after 30-90
-              days by our hosting providers.
-            </li>
-          </ul>
-        </section>
+            {/* --- Section 4: Cookies --- */}
+            <section id="cookies" className="scroll-mt-32 space-y-6">
+              <h2 className="text-3xl font-bold text-foreground">
+                04. Cookies & Tracking
+              </h2>
+              <p className="text-muted-foreground text-lg leading-relaxed">
+                This site uses technical cookies and LocalStorage to remember
+                your preferences (like **Dark Mode**) and to maintain your
+                logged-in session. These are essential for the site to function
+                correctly. I do not use third-party tracking cookies for
+                advertising.
+              </p>
+            </section>
 
-        {/* 6. International Data Transfers */}
-        <section className="space-y-5">
-          <div className="flex items-center gap-4">
-            <span className="bg-primary/10 text-primary h-8 w-8 flex items-center justify-center rounded-full text-sm font-bold">
-              06
-            </span>
-            <h2 className="text-2xl font-bold text-foreground">
-              International Data Transfers
-            </h2>
-          </div>
-          <p>
-            Since I use global infrastructure providers like Vercel and
-            Supabase, your data may be processed outside of your country of
-            residence (e.g., in the United States). By using this site, you
-            consent to this international transfer of information.
-          </p>
-        </section>
+            {/* --- Section 5: Third-Party --- */}
+            <section id="thirdparty" className="scroll-mt-32 space-y-6">
+              <h2 className="text-3xl font-bold text-foreground">
+                05. Third-Party Services
+              </h2>
+              <div className="p-6 bg-primary/5 rounded-2xl border border-primary/10">
+                <p className="mb-4 font-semibold text-foreground">
+                  I share data only with the following essential processors:
+                </p>
+                <div className="flex flex-wrap gap-3">
+                  {[
+                    "Vercel (Hosting)",
+                    "Supabase (DB/Auth)",
+                    "Resend (Email)",
+                    "GitHub (OAuth)",
+                  ].map((s) => (
+                    <span
+                      key={s}
+                      className="px-4 py-2 bg-background border border-primary/20 rounded-full text-sm"
+                    >
+                      {s}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </section>
 
-        {/* 7. Children's Privacy */}
-        <section className="space-y-5">
-          <div className="flex items-center gap-4">
-            <span className="bg-primary/10 text-primary h-8 w-8 flex items-center justify-center rounded-full text-sm font-bold">
-              07
-            </span>
-            <h2 className="text-2xl font-bold text-foreground">
-              Children's Privacy (COPPA)
-            </h2>
-          </div>
-          <p>
-            This website does not target or knowingly collect data from children
-            under the age of 13. If I discover that a child under 13 has
-            provided personal information, I will delete it from my servers
-            immediately.
-          </p>
-        </section>
+            {/* --- Section 6: Security --- */}
+            <section id="security" className="scroll-mt-32 space-y-6">
+              <h2 className="text-3xl font-bold text-foreground">
+                06. Data Security
+              </h2>
+              <p className="text-muted-foreground text-lg leading-relaxed">
+                I have implemented appropriate technical and organizational
+                security measures designed to protect the security of any
+                personal information I process. However, please also remember
+                that I cannot guarantee that the internet itself is 100% secure.
+              </p>
+            </section>
 
-        {/* 8. Your Rights & Access */}
-        <section className="space-y-5">
-          <div className="flex items-center gap-4">
-            <span className="bg-primary/10 text-primary h-8 w-8 flex items-center justify-center rounded-full text-sm font-bold">
-              08
-            </span>
-            <h2 className="text-2xl font-bold text-foreground">Your Rights</h2>
-          </div>
-          <p>Depending on your location, you have the following rights:</p>
-          <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 list-none list-inside">
-            <li className="flex items-center gap-2">
-              ✅ Right to Access your data.
-            </li>
-            <li className="flex items-center gap-2">
-              ✅ Right to Rectify (Correct) data.
-            </li>
-            <li className="flex items-center gap-2">
-              ✅ Right to Erasure (Forget me).
-            </li>
-            <li className="flex items-center gap-2">
-              ✅ Right to Data Portability.
-            </li>
-          </ul>
-        </section>
+            {/* --- Section 7: Rights --- */}
+            <section id="rights" className="scroll-mt-32 space-y-6">
+              <h2 className="text-3xl font-bold text-foreground">
+                07. Your Privacy Rights
+              </h2>
+              <p className="text-muted-foreground text-lg leading-relaxed italic">
+                You may review, change, or terminate your account at any time.
+                If you would like to request a copy of your data or its
+                deletion, please contact me.
+              </p>
+            </section>
 
-        {/* Final Contact */}
-        <section className="pt-10 border-t border-primary/20">
-          <div className="bg-muted p-8 rounded-2xl text-center space-y-4">
-            <h2 className="text-2xl font-bold text-foreground">
-              Contact for Privacy Concerns
-            </h2>
-            <p>
-              For any privacy-related requests or data deletion queries, contact
-              me directly:😇
-            </p>
-            <a
-              href="mailto:paulatul020@gmail.com"
-              className="inline-block text-primary font-bold text-xl hover:scale-105 transition-transform"
+            {/* --- Section 8: Contact --- */}
+            <section
+              id="contact"
+              className="scroll-mt-32 pt-10 border-t border-primary/20"
             >
-              paulatul020@gmail.com
-            </a>
-          </div>
-        </section>
+              <h2 className="text-3xl font-bold text-foreground">
+                08. Contact Me
+              </h2>
+              <p className="text-muted-foreground text-lg mb-6">
+                If you have questions or comments about this notice, you may
+                email me at:
+              </p>
+              <a
+                href="mailto:paulatul020@gmail.com"
+                className="text-2xl font-bold text-primary hover:underline underline-offset-8"
+              >
+                paulatul020@gmail.com
+              </a>
+            </section>
+          </main>
+        </div>
       </div>
     </div>
   );
