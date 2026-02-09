@@ -80,7 +80,9 @@ export default function AdminDashboard() {
     postId: string,
     status: "approved" | "rejected",
   ) => {
-    const promise = supabase.from("posts").update({ status }).eq("id", postId);
+   const promise = Promise.resolve(
+     supabase.from("posts").update({ status }).eq("id", postId),
+   );
     toast.promise(promise, {
       loading: "Processing...",
       success: () => {

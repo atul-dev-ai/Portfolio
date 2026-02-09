@@ -1,9 +1,10 @@
 "use server";
 
 import { Resend } from "resend";
-import { EmailTemplate } from "@/components/ui/email-template";
+import { EmailTemplate } from "./email-template";
+import * as React from "react";
 
-const resend = new Resend(process.env.re_FMHZWico_5UMioZbZK3M2YomBsEPdChdK);
+const resend = new Resend(process.env.re_WMypeu89_CGmeQ7LoXduyhYzKpfGFRHhr);
 
 export const sendEmail = async (formData: FormData) => {
   const name = formData.get("user_name") as string;
@@ -18,15 +19,18 @@ export const sendEmail = async (formData: FormData) => {
   try {
     const data = await resend.emails.send({
       from: "Contact Form <onboarding@resend.dev>",
-      to: "atul11tem@gmail.com", // আপনার ইমেইল ঠিক আছে তো?
+      to: "atul11tem@gmail.com",
       subject: `New Message: ${subject}`,
       replyTo: email,
-      react: EmailTemplate({
-        name,
-        email,
-        message,
-        subject,
-      }),
+      // ⚠️ আগে ভুল ছিল এখানে, এখন ঠিক করা হলো JSX দিয়ে
+      react: (
+        <EmailTemplate
+          name={name}
+          email={email}
+          message={message}
+          subject={subject}
+        />
+      ),
     });
 
     if (data.error) {
@@ -36,10 +40,7 @@ export const sendEmail = async (formData: FormData) => {
 
     return { success: true };
   } catch (error: any) {
-    // এই লাইনটি টার্মিনালে আসল সমস্যা প্রিন্ট করবে
     console.error("Resend Server Error:", error);
-
-    // এরর মেসেজটি ক্লায়েন্টে পাঠাবে
     return { error: error.message || "Something went wrong" };
   }
 };
