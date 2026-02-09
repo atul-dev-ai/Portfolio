@@ -38,7 +38,7 @@ const projectsData = [
     description:
       "An AI-based system to detect mobile phone usage in restricted areas using computer vision.",
     image: "/aidetection.png",
-    tags: ["Python", "OpenCV", "YOLO"],
+    tags: ["Python", "OpenCV", "YOLO", "HTML", "CSS", "JS"],
     liveLink: "https://atul-dev-ai.github.io/Mobile-Detection-Two/",
     repoLink: "https://github.com/atul-dev-ai/Mobile-Detection-Two",
   },
@@ -50,6 +50,51 @@ const projectsData = [
     tags: ["Bootstrap", "CSS", "JavaScript"],
     liveLink: "https://atul-dev-ai.github.io/grand-portfolio/",
     repoLink: "https://github.com/atul-dev-ai/grand-portfolio",
+  },
+  {
+    id: 4,
+    title: "Bootslander Clone Website",
+    description: "Bootslander Clone Project For my Assignment",
+    image: "/bootstlander.png",
+    tags: ["Bootstrap", "CSS", "JavaScript"],
+    liveLink: "https://atul-dev-ai.github.io/bootslander-assignment",
+    repoLink: "https://github.com/atul-dev-ai/bootslander-assignment",
+  },
+  {
+    id: 5,
+    title: "First Portfolio Website",
+    description: "A Font-end website for my personal project showcase.",
+    image: "/1st-portfo.png",
+    tags: ["Bootstrap", "CSS", "JavaScript"],
+    liveLink: "https://atul-dev-ai.github.io/my-portfolio-website",
+    repoLink: "https://github.com/atul-dev-ai/my-portfolio-website",
+  },
+  {
+    id: 6,
+    title: "QR Code Generator ",
+    description: "A QR Code Generator website for large link to QR Image.",
+    image: "/qr-code.png",
+    tags: ["HTML", "CSS", "JavaScript"],
+    repoLink: "https://atul-dev-ai.github.io/QR-code-generator",
+    liveLink: "https://github.com/atul-dev-ai/QR-code-generator",
+  },
+  {
+    id: 7,
+    title: "First Portfolio Website",
+    description: "A Font-end website for my personal project showcase.",
+    image: "/login-page.png",
+    tags: ["Bootstrap", "CSS", "JavaScript"],
+    liveLink: "https://atul-dev-ai.github.io/Login-Page-two",
+    repoLink: "https://github.com/atul-dev-ai/Login-Page-two",
+  },
+  {
+    id: 8,
+    title: "First Portfolio Website",
+    description: "A Font-end website for my personal project showcase.",
+    image: "/second.png",
+    tags: ["Bootstrap", "CSS", "JavaScript"],
+    liveLink: "https://atul-dev-ai.github.io/Portfolio-project-1",
+    repoLink: "https://github.com/atul-dev-ai/Portfolio-project-1",
   },
 ];
 
@@ -204,7 +249,7 @@ export default function ProjectsSection() {
   return (
     <section
       id="projects"
-      className="container mx-auto px-6 md:px-12 py-18 space-y-16 perspective-1000"
+      className="container mx-auto px-6 md:px-12 py-8 space-y-16 perspective-1000"
     >
       {/* Section Header */}
       <motion.div
@@ -239,13 +284,13 @@ export default function ProjectsSection() {
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
-          className="flex justify-center pt-8"
+          className="flex justify-center pt-2"
         >
           <Button
             variant="outline"
             size="lg"
             onClick={() => setShowAll(!showAll)}
-            className="group gap-2 border-primary/20 hover:bg-primary/10 rounded-full px-8"
+            className="group gap-2 border-primary/20 hover:bg-primary/10 rounded-full px-8 cursor-pointer hover:-translate-y-0.5 transition duration-300"
           >
             {showAll ? (
               <>

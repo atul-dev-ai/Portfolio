@@ -74,7 +74,7 @@ export default function BioSection() {
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.3 }}
           >
-            <Card className="border-none bg-primary/5">
+            <Card className="border-none mx-6 sm:ms-8 bg-primary/5">
               <CardContent className="p-6 flex items-center gap-4 animate-pulse">
                 <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center text-primary animate-pulse">
                   <MapPin className="h-6 w-6 animate-collapsible-down [animation-duration:4s]" />
@@ -96,8 +96,8 @@ export default function BioSection() {
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.4 }}
           >
-            <Card className="border-none bg-primary/5">
-              <CardContent className="p-6 flex items-center gap-4 animate-collapsible-down ">
+            <Card className="border-none mx-6 sm:mx-8 bg-primary/5">
+              <CardContent className="p-6 sm:p-8 flex items-center gap-4 animate-collapsible-down ">
                 <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center text-primary">
                   <GraduationCap className="h-6 w-6 animate-pulse" />
                 </div>
@@ -123,8 +123,8 @@ export default function BioSection() {
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.5 }}
         >
-          <Card className="h-full border-none bg-gradient-to-br from-primary/5 to-accent/10">
-            <CardContent className="p-6 space-y-4">
+          <Card className="h-full mx-6 sm:mx-8 border-none bg-gradient-to-br from-primary/5 to-accent/9 dark:to-accent/40 ml-5">
+            <CardContent className="p-6 sm:p-8 space-y-4">
               <div className="flex items-center gap-2 mb-2">
                 <Code2 className="h-5 w-5 text-primary animate-pulse" />
                 <h4 className="font-semibold">Tech Focus</h4>
@@ -157,8 +157,8 @@ export default function BioSection() {
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.6 }}
         >
-          <Card className="h-full border-none bg-accent/5">
-            <CardContent className="p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <Card className="h-full border-none bg-accent/9 dark:bg-accent/30 mx-7 sm:mx-0">
+            <CardContent className="p-6 sm:p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
               <div>
                 <h4 className="font-semibold text-lg mb-1">
                   When I'm not coding...

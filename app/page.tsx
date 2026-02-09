@@ -2,7 +2,6 @@ import HeroSection from "@/components/ui/hero-section";
 import BioSection from "@/components/ui/bio-section";
 import Skills from "@/components/ui/skills-section";
 import ProjectsSection from "@/components/ui/projects-section";
-// ১. এখানে ইমপোর্ট করা হয়েছে কি না দেখুন
 import EducationSection from "@/components/ui/education-section";
 import ContactSection from "@/components/ui/contact-section";
 
