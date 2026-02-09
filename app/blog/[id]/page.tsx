@@ -55,9 +55,15 @@ export default function SingleBlogPage() {
         transition={{ duration: 0.5 }}
         className="container max-w-4xl mx-auto space-y-8"
       >
-        <Button variant="ghost" size="sm" asChild className="mb-4">
+        <Button
+          variant="outline"
+          size="sm"
+          asChild
+          className="mb-4 transition duration-200 hover:scale-105 hover:-translate-y-0.5 group"
+        >
           <Link href="/blog">
-            <ArrowLeft className="mr-2 h-4 w-4" /> Back to All Posts
+            <ArrowLeft className="mr-2 h-4 w-4 animate-pulse transition duration-200 group-hover:scale-105 group-hover:-translate-x-1" />{" "}
+            Back to All Posts
           </Link>
         </Button>
 
@@ -91,7 +97,7 @@ export default function SingleBlogPage() {
               </div>
             </div>
             <div className="flex items-center gap-2 text-sm">
-              <Calendar className="h-4 w-4" />
+              <Calendar className="h-4 w-4 animate-caret-blink [animation-duration:5s]" />
               <span>{new Date(post.created_at).toLocaleDateString()}</span>
             </div>
           </div>

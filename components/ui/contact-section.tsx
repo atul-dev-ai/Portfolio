@@ -27,25 +27,25 @@ export default function ContactSection() {
     {
       name: "GitHub",
       icon: Github,
-      url: "https://github.com/atulpaul",
+      url: "https://github.com/atul-dev-ai",
       color: "hover:text-gray-400",
     },
     {
       name: "LinkedIn",
       icon: Linkedin,
-      url: "https://linkedin.com/in/atulpaul",
+      url: "https://linkedin.com/in/paul-atul",
       color: "hover:text-blue-500",
     },
     {
       name: "Facebook",
       icon: Facebook,
-      url: "https://facebook.com/atulpaul",
+      url: "https://www.facebook.com/atulkumar.paul.71",
       color: "hover:text-blue-600",
     },
     {
       name: "Twitter",
       icon: Twitter,
-      url: "https://twitter.com/atulpaul",
+      url: "https://twitter.com/atulpaul020",
       color: "hover:text-sky-400",
     },
   ];
@@ -64,8 +64,10 @@ export default function ContactSection() {
           viewport={{ once: true }}
           className="text-center mb-16 space-y-4"
         >
-          <div className="inline-flex items-center px-3 py-1 rounded-full border border-primary/20 bg-primary/5 text-primary text-sm font-medium">
-            <span>📬 Get in Touch</span>
+          <div className="inline-flex items-center px-3 py-1 rounded-full border border-primary/20 bg-primary/5 text-primary text-sm font-medium animate-bounce [animation-duration:2s]">
+            <span>
+              <span className="animate-pulse [animation-duration: 3s]">📬</span> Get in Touch
+            </span>
           </div>
           <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight">
             Let&apos;s Connect Together
@@ -94,9 +96,9 @@ export default function ContactSection() {
               <div className="space-y-4">
                 <div className="flex items-center gap-4 p-4 rounded-xl bg-secondary/50 border border-border/50 hover:border-primary/50 transition-colors">
                   <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
-                    <Mail className="h-5 w-5" />
+                    <Mail className="h-5 w-5 animate-pulse" />
                   </div>
-                  <div>
+                  <div className="animate-pulse">
                     <p className="text-sm font-medium text-muted-foreground">
                       Email
                     </p>
@@ -111,9 +113,9 @@ export default function ContactSection() {
 
                 <div className="flex items-center gap-4 p-4 rounded-xl bg-secondary/50 border border-border/50 hover:border-primary/50 transition-colors">
                   <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
-                    <MapPin className="h-5 w-5" />
+                    <MapPin className="h-5 w-5 animate-pulse" />
                   </div>
-                  <div>
+                  <div className="animate-pulse">
                     <p className="text-sm font-medium text-muted-foreground">
                       Location
                     </p>
@@ -125,7 +127,7 @@ export default function ContactSection() {
 
             <div className="space-y-4">
               <h4 className="text-lg font-semibold">Follow Me</h4>
-              <div className="flex gap-4">
+              <div className="flex gap-4 animate-pulse">
                 {socialLinks.map((social) => (
                   <a
                     key={social.name}
@@ -225,17 +227,17 @@ export default function ContactSection() {
 
                   <Button
                     type="submit"
-                    className="w-full h-12 text-lg font-medium"
+                    className="w-full h-12 text-lg font-medium mt-1 cursor-pointer"
                     disabled={loading}
                   >
                     {loading ? (
                       <div className="flex items-center gap-2">
-                        <div className="h-4 w-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                        <div className="h-4 w-4 border-2 border-white/30 border-t-white rounded-full " />
                         Sending...
                       </div>
                     ) : (
                       <div className="flex items-center gap-2">
-                        Send Message <Send className="h-4 w-4" />
+                        Send Message <Send className="h-4 w-4 animate-pulse [animation-duration:2.5s]" />
                       </div>
                     )}
                   </Button>

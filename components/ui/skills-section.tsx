@@ -21,14 +21,14 @@ import { Badge } from "@/components/ui/badge";
 const skillCategories = [
   {
     title: "Programming Languages",
-    icon: <Code2 className="w-8 h-8 text-blue-500" />,
+    icon: <Code2 className="w-8 h-8 text-blue-500 animate-bounce [animation-duration:2s]" />,
     skills: ["C", "C++", "Python", "JavaScript", "TypeScript"],
     gradient: "from-blue-500/10 via-cyan-500/10 to-transparent",
     border: "group-hover:border-blue-500/50",
   },
   {
     title: "Web Development",
-    icon: <Globe className="w-8 h-8 text-green-500" />,
+    icon: <Globe className="w-8 h-8 text-green-500 animate-bounce [animation-duration:2.2s]" />,
     skills: [
       "React.js",
       "Next.js 14",
@@ -42,7 +42,7 @@ const skillCategories = [
   },
   {
     title: "AI & Machine Learning",
-    icon: <BrainCircuit className="w-8 h-8 text-purple-500" />,
+    icon: <BrainCircuit className="w-8 h-8 text-purple-500 animate-bounce [animation-duration:2.2s]" />,
     skills: [
       "Generative AI",
       "Prompt Engineering",
@@ -50,12 +50,13 @@ const skillCategories = [
       "OpenAI API",
       "Python for AI",
     ],
-    gradient: "from-purple-500/10 via-pink-500/10 to-transparent",
+    gradient:
+      "from-purple-500/10 via-pink-500/10 to-transparent",
     border: "group-hover:border-purple-500/50",
   },
   {
     title: "Tools & DevOps",
-    icon: <Wrench className="w-8 h-8 text-orange-500" />,
+    icon: <Wrench className="w-8 h-8 text-orange-500 animate-bounce [animation-duration:2 [animation-duration:2s]s]" />,
     skills: [
       "Git",
       "GitHub",
@@ -149,7 +150,7 @@ const TiltCard = ({
         </div>
 
         {/* স্কিল ব্যাজগুলো (মার্জিন ফিক্স করা হয়েছে) */}
-        <div className="flex flex-wrap gap-3 mt-auto">
+        <div className="flex flex-wrap gap-3 mt-auto animate-pulse [animation-duration:3s]">
           {data.skills.map((skill) => (
             <Badge
               key={skill}
@@ -167,7 +168,7 @@ const TiltCard = ({
 
 export default function Skills() {
   return (
-    <section id="skills" className="py-24 relative overflow-hidden bg-black/95">
+    <section id="skills" className="py-34 relative overflow-hidden bg-black/95">
       {/* ব্যাকগ্রাউন্ড ডেকোরেশন */}
       <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-[128px] pointer-events-none" />
       <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-[128px] pointer-events-none" />

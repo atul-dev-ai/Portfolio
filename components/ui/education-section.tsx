@@ -48,10 +48,10 @@ export default function EducationSection() {
   const scaleY = useTransform(scrollYProgress, [0, 1], [0, 1]);
 
   return (
-    <section id="education" className="container mx-auto px-6 md:px-12 py-20">
+    <section id="education" className="container mx-auto px-6 md:px-12 py-16">
       <div className="flex flex-col items-center mb-16 space-y-4 text-center">
         <div className="inline-flex items-center px-3 py-1 rounded-full border border-primary/20 bg-primary/5 text-primary text-sm font-medium animate-bounce">
-          <GraduationCap className="w-4 h-4 mr-2" />
+          <GraduationCap className="w-4 h-4 mr-2 animate-pulse" />
           <span>Academic Journey</span>
         </div>
         <h2 className="text-3xl md:text-5xl font-bold tracking-tight">
@@ -85,7 +85,7 @@ export default function EducationSection() {
             >
               {/* Timeline Dot */}
               <div className="absolute left-0 w-10 h-10 rounded-full border-4 border-background bg-primary shadow-[0_0_10px_rgba(var(--primary),0.5)] z-10 flex items-center justify-center md:left-1/2 md:-translate-x-1/2">
-                <GraduationCap className="w-5 h-5 text-primary-foreground" />
+                <GraduationCap className="w-5 h-5 text-primary-foreground animate-caret-blink [animate-duration:5s]" />
               </div>
 
               {/* Empty Space for Desktop layout */}
@@ -94,12 +94,13 @@ export default function EducationSection() {
               {/* Content Card */}
               <Card className="ml-16 md:ml-0 w-full md:w-5/12 hover:shadow-lg hover:border-primary/50 transition-all duration-300">
                 <CardHeader>
-                  <div className="flex justify-between items-start mb-2">
+                  <div className="flex justify-between items-start mb-2 animate-pulse">
                     <Badge
                       variant="outline"
-                      className="mb-2 bg-primary/5 text-primary border-primary/20"
+                      className="mb-2 bg-primary/5 text-primary border-primary/20 animate-collapsible-down"
                     >
-                      <Calendar className="w-3 h-3 mr-1" /> {edu.year}
+                      <Calendar className="w-3 h-3 mr-1 animate-pulse" />{" "}
+                      {edu.year}
                     </Badge>
                   </div>
                   <CardTitle className="text-xl font-bold">
@@ -111,7 +112,8 @@ export default function EducationSection() {
                 </CardHeader>
                 <CardContent className="space-y-3">
                   <div className="flex items-center text-sm text-muted-foreground">
-                    <MapPin className="w-3 h-3 mr-1" /> {edu.location}
+                    <MapPin className="w-3 h-3 mr-1 animate-pulse" />{" "}
+                    {edu.location}
                   </div>
                   <p className="text-sm text-muted-foreground leading-relaxed">
                     {edu.description}

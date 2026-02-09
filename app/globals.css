@@ -126,5 +126,6 @@
   /* for smooth scrolling */
   html {
     scroll-behavior: smooth;
+    scrollbar-gutter: stable !important;
   }
 }

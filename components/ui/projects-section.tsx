@@ -128,10 +128,10 @@ const ProjectCard = ({ project }: { project: (typeof projectsData)[0] }) => {
         <div className="flex flex-col flex-1 p-6 space-y-4">
           <div>
             <div className="flex justify-between items-start mb-2">
-              <h3 className="text-xl font-bold tracking-tight group-hover:text-primary transition-colors">
+              <h3 className="text-xl font-bold tracking-tight group-hover:text-primary transition-colors animate-pulse [animation-duration:7s]">
                 {project.title}
               </h3>
-              <Layers className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
+              <Layers className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors animate-pulse [animation-duration:4s]" />
             </div>
             <p className="text-muted-foreground text-sm line-clamp-3 leading-relaxed">
               {project.description}
@@ -144,7 +144,7 @@ const ProjectCard = ({ project }: { project: (typeof projectsData)[0] }) => {
               <Badge
                 key={tag}
                 variant="secondary"
-                className="bg-secondary/50 hover:bg-primary/20 text-xs font-medium transition-colors"
+                className="bg-secondary/50 hover:bg-primary/20 text-xs font-medium transition-colors animate-pulse"
               >
                 {tag}
               </Badge>
@@ -167,7 +167,8 @@ const ProjectCard = ({ project }: { project: (typeof projectsData)[0] }) => {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <Github className="mr-2 h-4 w-4" /> Code
+                <Github className="mr-2 h-4 w-4 animate-bounce [animation-duration:2s]" />{" "}
+                Code
               </a>
             </Button>
             <Button
@@ -180,7 +181,7 @@ const ProjectCard = ({ project }: { project: (typeof projectsData)[0] }) => {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <ExternalLink className="mr-2 h-4 w-4" /> Demo
+                <ExternalLink className="mr-2 h-4 w-4  animate-pulse" /> Demo
               </a>
             </Button>
           </div>
@@ -203,7 +204,7 @@ export default function ProjectsSection() {
   return (
     <section
       id="projects"
-      className="container mx-auto px-6 md:px-12 py-24 space-y-16 perspective-1000"
+      className="container mx-auto px-6 md:px-12 py-18 space-y-16 perspective-1000"
     >
       {/* Section Header */}
       <motion.div
@@ -212,8 +213,8 @@ export default function ProjectsSection() {
         viewport={{ once: true }}
         className="text-center space-y-4 max-w-3xl mx-auto"
       >
-        <div className="inline-flex items-center px-3 py-1 rounded-full border border-primary/20 bg-primary/5 text-primary text-sm font-medium mb-2 animate-bounce">
-          <span>🚀 My Work</span>
+        <div className="inline-flex items-center px-3 py-1 rounded-full border border-primary/20 bg-primary/5 text-primary text-sm font-medium mb-2 animate-bounce [animation-duration:1.4s]">
+          <span><span className="animate-pulse">🚀</span>  My Work</span>
         </div>
         <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/70">
           Featured Projects

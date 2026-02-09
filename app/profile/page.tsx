@@ -137,7 +137,7 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="container mx-auto py-24 max-w-2xl px-4">
+    <div className="container mx-auto py-28 max-w-2xl px-4">
       <Card className="shadow-lg border-primary/10">
         <CardHeader className="text-center">
           <CardTitle className="text-3xl">My Profile</CardTitle>

@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     siteName: "Atul Paul Portfolio",
     images: [
       {
-        url: "/og-image.png", // ⚠️ নিচে পড়ুন
+        url: "/og-image.jpg", // ⚠️ নিচে পড়ুন
         width: 1200,
         height: 630,
         alt: "Atul Paul Portfolio Preview",
@@ -53,12 +53,15 @@ export const metadata: Metadata = {
     title: "Atul Paul | Full Stack Developer",
     description:
       "Building modern web applications with Next.js and AI integration.",
-    images: ["/og-image.png"],
+    images: ["/og-image.jpg"],
     creator: "@atulpaul020",
   },
 
   icons: {
     icon: "/favicon.ico",
+  },
+  other: {
+    "fb:app_id": "829194552813351",
   },
 };
 

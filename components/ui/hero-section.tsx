@@ -16,7 +16,7 @@ export default function HeroSection() {
   };
 
   return (
-    <section className="container flex flex-col-reverse md:flex-row items-center justify-between py-24 md:py-24 gap-10 px-4 md:px-8 overflow-hidden">
+    <section className="container flex flex-col-reverse md:flex-row items-center justify-between py-24 md:py-34 gap-10 px-4 md:px-8 overflow-hidden">
       {/* Left Side: Text Content */}
       <motion.div
         className="flex-1 flex flex-col gap-6 text-center md:text-left"
@@ -46,8 +46,10 @@ export default function HeroSection() {
           className="text-2xl md:text-4xl font-semibold flex gap-2 justify-center md:justify-start text-muted-foreground"
         >
           <span>I am a</span>
-          <span className="text-foreground"> {/* Typing Effect */}
-            <Typewriter 
+          <span className="text-foreground">
+            {" "}
+            {/* Typing Effect */}
+            <Typewriter
               options={{
                 strings: [
                   "Developer.",
@@ -59,7 +61,7 @@ export default function HeroSection() {
                 loop: true,
                 deleteSpeed: 50,
                 delay: 75,
-                wrapperClassName: "text-primary font-bold", // Typing text colour 
+                wrapperClassName: "text-primary font-bold", // Typing text colour
               }}
             />
           </span>
@@ -79,20 +81,26 @@ export default function HeroSection() {
           variants={fadeInUp}
           className="flex items-center justify-center md:justify-start gap-4 pt-4"
         >
-          <Button asChild size="lg" className="rounded-full gap-2">
+          <Button
+            asChild
+            size="lg"
+            className="rounded-full gap-2 transition duration-300 hover:-translate-y-0.5 hover:scale-105 group animate-bounce [animation-duration:5s]"
+          >
             <Link href="#projects">
-              View My Work <ArrowRight className="h-4 w-4" />
+              View My Work{" "}
+              <ArrowRight className="h-4 w-4 group-hover:scale-105 group-hover:translate-x-1.5 duration-300 animate-pulse" />
             </Link>
           </Button>
           <Button
             asChild
             variant="outline"
             size="lg"
-            className="rounded-full gap-2"
+            className="rounded-full gap-2 transition duration-300 hover:translate-y-0.5 hover:scale-x-105 group "
           >
             {/* Resume file link path like     href="/resume.pdf" */}
             <Link href="/my-cv.pdf" target="_blank">
-              Download CV <Download className="h-4 w-4" />
+              Download CV{" "}
+              <Download className="h-4 w-4 transition duration-300 group-hover:translate-y-1 group-hover:scale-x-105 animate-caret-blink [animation-duration:1.7s]" />
             </Link>
           </Button>
         </motion.div>
@@ -106,15 +114,12 @@ export default function HeroSection() {
         transition={{ duration: 0.5, delay: 0.2 }}
       >
         {/* Background Decorative blobs */}
-        <div className="absolute top-0 -left-4 w-72 h-72 bg-primary/30 rounded-full mix-blend-multiply filter blur-2xl opacity-70 animate-blob dark:mix-blend-screen"></div>
-        <div className="absolute top-0 -right-4 w-72 h-72 bg-accent/40 rounded-full mix-blend-multiply filter blur-2xl opacity-70 animate-blob animation-delay-2000 dark:mix-blend-screen"></div>
+        <div className="absolute top-0 -left-4 w-72 h-72 bg-pink-500/25 rounded-full mix-blend-multiply filter blur-2xl opacity-70 animate-blob dark:mix-blend-screen animate-pulse [animation-duration:1.1s]"></div>
+        <div className="absolute md:top-0 sm:bottom-0 -right-4 w-72 h-72 bg-pink-500/25 rounded-full mix-blend-multiply filter blur-2xl opacity-70 animate-blob  dark:mix-blend-screen animate-pulse [animation-duration:1s]"></div>
 
         {/* Main Image Container */}
-        <div className="relative w-[280px] h-[280px] md:w-[350px] md:h-[350px] rounded-full border-4 border-background shadow-2xl overflow-hidden z-10">
+        <div className="relative w-[280px] h-[280px] md:w-[350px] md:h-[350px] rounded-full border-4 border-background shadow-2xl overflow-hidden z-10 ">
           <Image
-            /* ⚠️ গুরুত্বপূর্ণ: আপনার ছবি public ফোল্ডারে রাখার পর
-              নিচের লাইনটি বদলে src="/profile.jpg" করে দিন।
-            */
             src="/atul3.jpg"
             alt="Atul Paul"
             fill

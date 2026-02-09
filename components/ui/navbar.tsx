@@ -4,7 +4,7 @@ import * as React from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { Menu, LogOut, LayoutDashboard, User, ShieldCheck } from "lucide-react";
+import { Menu, LogOut, LayoutDashboard, User, ShieldCheck, Contact2Icon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 // ফিক্স ১: পাথ চেক করুন (সাধারণত এটি ui ফোল্ডারের বাইরে থাকে)
 import { ModeToggle } from "@/components/ui/mode-toggle";
@@ -102,10 +102,10 @@ export default function Navbar() {
       <div className="container flex h-16 items-center justify-between px-4 md:px-8 mx-auto">
         {/* লোগো */}
         <Link href="/" className="flex items-center gap-2 group">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-primary-foreground font-bold text-2xl transition-transform group-hover:scale-105">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-primary-foreground font-bold text-2xl transition-transform group-hover:scale-105 animate-pulse">
             A
           </div>
-          <span className="hidden sm:inline-block font-bold text-lg tracking-tight">
+          <span className="hidden sm:inline-block font-bold text-lg tracking-tight transition duration-700 hover:-translate-y-0.5 hover:scale-110 hover:text-pink-400 animate-pulse">
             Atul Paul
           </span>
         </Link>
@@ -116,14 +116,14 @@ export default function Navbar() {
             <Link
               key={link.name}
               href={link.href}
-              className="relative px-4 py-2 text-sm font-medium transition-colors hover:text-foreground/80 text-foreground/60"
+              className="relative px-4 py-2 text-sm font-medium transition-colors hover:text-foreground/90 text-foreground/60 duration-500 hover:-translate-y-0.5 hover:scale-110"
               onMouseEnter={() => setHoveredPath(link.href)}
               onMouseLeave={() => setHoveredPath(null)}
             >
               <span className="relative z-10">{link.name}</span>
               {hoveredPath === link.href && (
                 <motion.div
-                  className="absolute inset-0 rounded-full bg-accent/50 dark:bg-accent/30"
+                  className="absolute inset-0 rounded-full bg-accent/90 dark:bg-accent "
                   layoutId="navbar-hover"
                   transition={{ type: "spring", bounce: 0.2, duration: 0.3 }}
                 />
@@ -140,36 +140,49 @@ export default function Navbar() {
             /* --- লগইন থাকলে --- */
             isBlogSection ? (
               /* ব্লগ সাইড: Admin, Profile, Dashboard, Logout */
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 mr-5">
                 {isAdmin && (
                   <Button
                     variant="destructive"
                     size="sm"
                     asChild
-                    className="bg-red-600 hover:bg-red-700"
+                    className="bg-red-600 hover:bg-red-700 duration-300 transition hover:translate-y-0.5 hover:scale-105"
                   >
                     <Link href="/admin">
-                      <ShieldCheck className="mr-2 h-4 w-4" /> Admin
+                      <ShieldCheck className="mr-2 h-4 w-4 animate-pulse" />{" "}
+                      Admin
                     </Link>
                   </Button>
                 )}
-                <Button variant="ghost" size="sm" asChild>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  asChild
+                  className="transition duration-300 hover:-translate-y-0.5 hover:scale-105"
+                >
                   <Link href="/profile" className="flex items-center gap-2">
-                    <User className="h-4 w-4" /> Profile
+                    <User className="h-4 w-4 animate-pulse" /> Profile
                   </Link>
                 </Button>
-                <Button variant="outline" size="sm" asChild>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  asChild
+                  className="transition duration-300 hover:translate-y-0.5 hover:scale-105"
+                >
                   <Link href="/dashboard">
-                    <LayoutDashboard className="mr-2 h-4 w-4" /> Dashboard
+                    <LayoutDashboard className="mr-2 h-4 w-4 animate-pulse" />{" "}
+                    Dashboard
                   </Link>
                 </Button>
                 <Button
                   variant="ghost"
                   size="icon"
                   onClick={handleLogout}
-                  className="text-destructive"
+                  className="text-destructive ml-2 transition duration-300 hover:scale-105 hover:-translate-0.5"
                 >
-                  <LogOut className="h-4 w-4" />
+                  <LogOut className="h-4 w-5 ml-8 animate-pulse" />
+                  logout
                 </Button>
               </div>
             ) : (
@@ -179,14 +192,17 @@ export default function Navbar() {
                   variant="ghost"
                   size="sm"
                   asChild
-                  className="hover:bg-accent border border-transparent hover:border-border"
+                  className="hover:bg-accent border border-transparent hover:border-border transition duration-300 hover:-translate-0.5"
                 >
                   <Link href="/profile" className="flex items-center gap-2">
-                    <User className="h-4 w-4" />
+                    <User className="h-4 w-4 animate-pulse" />
                     <span className="text-sm font-medium">Profile</span>
                   </Link>
                 </Button>
-                <Button className="rounded-full px-6" asChild>
+                <Button
+                  className="rounded-full px-6 transition duration-300 hover:-translate-0.5"
+                  asChild
+                >
                   <Link href="#contact">Contact</Link>
                 </Button>
               </div>
@@ -194,15 +210,27 @@ export default function Navbar() {
           ) : /* --- লগআউট থাকলে --- */
           isBlogSection ? (
             <div className="flex items-center gap-2">
-              <Button variant="ghost" size="sm" asChild>
+              <Button
+                variant="ghost"
+                size="sm"
+                asChild
+                className="hover:-translate-1.5 duration-300 transition"
+              >
                 <Link href="/login">Login</Link>
               </Button>
-              <Button size="sm" className="rounded-full px-6" asChild>
+              <Button
+                size="sm"
+                className="rounded-full px-6 hover:-translate-0.5 duration-300 transition"
+                asChild
+              >
                 <Link href="/signup">Sign Up</Link>
               </Button>
             </div>
           ) : (
-            <Button className="rounded-full px-6" asChild>
+            <Button
+              className="rounded-full px-6 hover:-translate-0.5 duration-300 transition"
+              asChild
+            >
               <Link href="#contact">Contact</Link>
             </Button>
           )}
@@ -255,7 +283,7 @@ export default function Navbar() {
                     </Link>
                     <Button
                       variant="destructive"
-                      className="w-full justify-start gap-3 py-6"
+                      className="w-full justify-start gap-2 py-6"
                       onClick={handleLogout}
                     >
                       <LogOut /> Logout

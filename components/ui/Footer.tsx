@@ -55,7 +55,7 @@ export default function Footer() {
               className="rounded-full"
               onClick={scrollToTop}
             >
-              <ArrowUp className="h-5 w-5" />
+              <ArrowUp className="h-5 w-5 animate-pulse cursor-pointer" />
             </Button>
           </div>
         </div>
@@ -155,7 +155,7 @@ export default function Footer() {
           <div className="col-span-2 md:col-span-1 space-y-4 bg-accent/5 p-6 rounded-2xl border border-border/50">
             <h3 className="font-semibold text-foreground">Local Time</h3>
             <div className="flex items-center gap-2">
-              <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
+              <div className="h-2 w-2 rounded-full bg-green-300 animate-caret-blink [animation-duration:1.5s]" />
               <span className="text-2xl font-mono font-bold">{time}</span>
             </div>
             <p className="text-xs text-muted-foreground">Dhaka, Bangladesh</p>
@@ -166,7 +166,7 @@ export default function Footer() {
         <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
           <p>
             © {new Date().getFullYear()}
-            <a href="/" className="text-pink-500 font-bold text-[18px]">
+            <a href="/" className="text-pink-500 font-bold text-[18px] animate-pulse [animation-duration:1s]">
               {" "}
               Atul Paul
             </a>
@@ -174,7 +174,7 @@ export default function Footer() {
           </p>
           <div className="flex items-center gap-1">
             <span>Made with</span>
-            <Heart className="h-4 w-4 text-red-500 fill-red-500" />
+            <Heart className="h-4 w-4 text-red-500 fill-red-500 animate-caret-blink [animation-duration:1.2s]" />
             <span>using Next.js & shadcn/ui</span>
           </div>
         </div>

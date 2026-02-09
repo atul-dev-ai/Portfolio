@@ -14,7 +14,7 @@ import { Badge } from "@/components/ui/badge";
 
 export default function BioSection() {
   return (
-    <section id="bio" className="container py-24 md:py-32 space-y-12">
+    <section id="bio" className="container py-18 md:py-18 space-y-12">
       {/* Section Header */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -23,7 +23,7 @@ export default function BioSection() {
         transition={{ duration: 0.5 }}
         className="text-center space-y-4"
       >
-        <h2 className="text-3xl md:text-5xl font-bold tracking-tighter">
+        <h2 className="text-3xl md:text-5xl font-bold tracking-tighter animate-bounce [animation-duration:8s]">
           About Me
         </h2>
         <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
@@ -75,9 +75,9 @@ export default function BioSection() {
             transition={{ duration: 0.5, delay: 0.3 }}
           >
             <Card className="border-none bg-primary/5">
-              <CardContent className="p-6 flex items-center gap-4">
-                <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center text-primary">
-                  <MapPin className="h-6 w-6" />
+              <CardContent className="p-6 flex items-center gap-4 animate-pulse">
+                <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center text-primary animate-pulse">
+                  <MapPin className="h-6 w-6 animate-collapsible-down [animation-duration:4s]" />
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground font-medium uppercase tracking-wider">
@@ -97,12 +97,12 @@ export default function BioSection() {
             transition={{ duration: 0.5, delay: 0.4 }}
           >
             <Card className="border-none bg-primary/5">
-              <CardContent className="p-6 flex items-center gap-4">
+              <CardContent className="p-6 flex items-center gap-4 animate-collapsible-down ">
                 <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center text-primary">
-                  <GraduationCap className="h-6 w-6" />
+                  <GraduationCap className="h-6 w-6 animate-pulse" />
                 </div>
                 <div>
-                  <p className="text-sm text-muted-foreground font-medium uppercase tracking-wider">
+                  <p className="text-sm text-muted-foreground font-medium uppercase tracking-wider  animate-pulse">
                     Education
                   </p>
                   <p className="font-semibold">BSc in Computing & IS</p>
@@ -126,10 +126,10 @@ export default function BioSection() {
           <Card className="h-full border-none bg-gradient-to-br from-primary/5 to-accent/10">
             <CardContent className="p-6 space-y-4">
               <div className="flex items-center gap-2 mb-2">
-                <Code2 className="h-5 w-5 text-primary" />
+                <Code2 className="h-5 w-5 text-primary animate-pulse" />
                 <h4 className="font-semibold">Tech Focus</h4>
               </div>
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-2 animate-pulse [animate-duration:4s]">
                 {[
                   "C Programming",
                   "Python",
@@ -170,19 +170,19 @@ export default function BioSection() {
               <div className="flex gap-4">
                 <div className="flex flex-col items-center gap-2">
                   <div className="h-10 w-10 rounded-full bg-background flex items-center justify-center shadow-sm">
-                    <Camera className="h-5 w-5 text-foreground" />
+                    <Camera className="h-5 w-5 text-foreground  animate-pulse" />
                   </div>
                   <span className="text-xs font-medium">Photography</span>
                 </div>
                 <div className="flex flex-col items-center gap-2">
                   <div className="h-10 w-10 rounded-full bg-background flex items-center justify-center shadow-sm">
-                    <Palette className="h-5 w-5 text-foreground" />
+                    <Palette className="h-5 w-5 text-foreground animate-pulse" />
                   </div>
                   <span className="text-xs font-medium">Editing</span>
                 </div>
                 <div className="flex flex-col items-center gap-2">
                   <div className="h-10 w-10 rounded-full bg-background flex items-center justify-center shadow-sm">
-                    <Gamepad2 className="h-5 w-5 text-foreground" />
+                    <Gamepad2 className="h-5 w-5 text-foreground animate-pulse" />
                   </div>
                   <span className="text-xs font-medium">Gaming</span>
                 </div>
