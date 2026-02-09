@@ -44,7 +44,7 @@ useEffect(() => {
   }
 
   return (
-    <div className="container mx-auto py-12 px-4">
+    <div className="container mx-auto py-28 px-4">
       <div className="text-center mb-12 space-y-4">
         <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl">
           Latest Writings

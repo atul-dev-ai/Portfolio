@@ -217,7 +217,7 @@ export default function Navbar() {
                 <Menu className="h-6 w-6" />
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-[85vw] sm:w-[350px]">
+            <SheetContent side="right" className="w-[85vw] sm:w-[350px] pt-16">
               {/* ফিক্স ২: SheetTitle অবশ্যই SheetHeader এর ভেতরে থাকতে হবে */}
               <SheetHeader>
                 <SheetTitle className="text-left">Menu</SheetTitle>

@@ -48,7 +48,7 @@ export default function SingleBlogPage() {
   if (!post) return <div className="text-center py-20">Post not found</div>;
 
   return (
-    <div className="min-h-screen bg-background pt-24 pb-12 px-4">
+    <div className="min-h-screen bg-background pt-28 pb-12 px-4">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}

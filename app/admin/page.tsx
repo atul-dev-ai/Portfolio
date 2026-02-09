@@ -101,7 +101,7 @@ export default function AdminDashboard() {
     );
 
   return (
-    <div className="container mx-auto py-10 px-4">
+    <div className="container mx-auto py-28 px-4">
       <Card>
         <CardHeader>
           <div className="flex items-center gap-2">
