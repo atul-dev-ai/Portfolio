@@ -12,7 +12,8 @@ const inter = Inter({ subsets: ["latin"] });
 // ১. এখানে আপনার মেটাডাটা এবং SEO কনফিগারেশন করা হলো
 // ------------------------------------------------------------------
 export const metadata: Metadata = {
-  // ১. ব্রাউজার ট্যাবে যা দেখাবে
+  metadataBase: new URL("https://atulpaul.vercel.app"), // 👈 এখানে আসল লিংক বসানো হলো
+
   title: {
     default: "Atul Paul | Full Stack Developer",
     template: "%s | Atul Paul",
@@ -20,7 +21,6 @@ export const metadata: Metadata = {
   description:
     "Portfolio of Atul Paul, a passionate Full Stack Developer specializing in Next.js, React, and Python based in Dhaka, Bangladesh.",
 
-  // ২. কিওয়ার্ডস (গুগল সার্চের জন্য)
   keywords: [
     "Atul Paul",
     "Full Stack Developer",
@@ -30,19 +30,15 @@ export const metadata: Metadata = {
     "Portfolio",
   ],
 
-  // ৩. অরিজিনাল সাইট লিংক (Live হওয়ার পর ডোমেইন দেবেন)
-  metadataBase: new URL("https://atulpaul.vercel.app"), // (⚠️ চেঞ্জ করুন: আপনার লাইভ ডোমেইন)
-
-  // ৪. সোশ্যাল মিডিয়া শেয়ার প্রিভিউ (Open Graph)
   openGraph: {
     title: "Atul Paul | Full Stack Developer",
     description:
       "Building modern web applications with Next.js and AI integration.",
-    url: "https://atulpaul.vercel.app",
+    url: "https://atulpaul.vercel.app", // 👈 এখানেও ঠিক করা হলো
     siteName: "Atul Paul Portfolio",
     images: [
       {
-        url: "/og-image.png", // (⚠️ ধাপ ২ দেখুন)
+        url: "/og-image.png", // ⚠️ নিচে পড়ুন
         width: 1200,
         height: 630,
         alt: "Atul Paul Portfolio Preview",
@@ -52,17 +48,15 @@ export const metadata: Metadata = {
     type: "website",
   },
 
-  // ৫. টুইটার প্রিভিউ
   twitter: {
     card: "summary_large_image",
     title: "Atul Paul | Full Stack Developer",
     description:
       "Building modern web applications with Next.js and AI integration.",
-    images: ["/og-image.png"], // (⚠️ ধাপ ২ দেখুন)
-    creator: "@atulpaul020", // (আপনার টুইটার হ্যান্ডেল)
+    images: ["/og-image.png"],
+    creator: "@atulpaul020",
   },
 
-  // ৬. আইকন (Favicon)
   icons: {
     icon: "/favicon.ico",
   },
