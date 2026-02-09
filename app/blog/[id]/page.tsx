@@ -1,0 +1,116 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
+import { supabase } from "@/lib/supabaseClient";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Loader2, ArrowLeft, Calendar, User, Clock } from "lucide-react";
+import Link from "next/link";
+import { motion } from "framer-motion";
+
+export default function SingleBlogPage() {
+  const { id } = useParams();
+  const [post, setPost] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchPost = async () => {
+      if (!id) return;
+
+      // লক্ষ্য করুন: আমরা এখানে full_name বাদ দিয়েছি যাতে এরর না হয়
+      // ডাটাবেস ফিক্স হলে আপনি আবার full_name যোগ করতে পারবেন
+      const { data, error } = await supabase
+        .from("posts")
+        .select("*, profiles(email, full_name)")
+        .eq("id", id)
+        .single();
+
+      if (error) {
+        console.error("Error fetching post:", error);
+      } else {
+        setPost(data);
+      }
+      setLoading(false);
+    };
+
+    fetchPost();
+  }, [id]);
+
+  if (loading)
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <Loader2 className="animate-spin h-8 w-8 text-primary" />
+      </div>
+    );
+
+  if (!post) return <div className="text-center py-20">Post not found</div>;
+
+  return (
+    <div className="min-h-screen bg-background pt-24 pb-12 px-4">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="container max-w-4xl mx-auto space-y-8"
+      >
+        <Button variant="ghost" size="sm" asChild className="mb-4">
+          <Link href="/blog">
+            <ArrowLeft className="mr-2 h-4 w-4" /> Back to All Posts
+          </Link>
+        </Button>
+
+        <div className="space-y-4">
+          <Badge
+            variant="secondary"
+            className="mb-2 uppercase tracking-widest text-xs"
+          >
+            {post.category || "General"}
+          </Badge>
+
+          <h1 className="text-3xl md:text-5xl font-extrabold leading-tight tracking-tight">
+            {post.title}
+          </h1>
+
+          <div className="flex flex-wrap items-center gap-6 text-muted-foreground pt-4 border-b border-border/40 pb-8">
+            <div className="flex items-center gap-2">
+              <Avatar className="h-10 w-10 border-2 border-primary/20">
+                <AvatarFallback>
+                  <User className="h-5 w-5" />
+                </AvatarFallback>
+              </Avatar>
+              <div className="flex flex-col">
+                <span className="text-sm font-semibold text-foreground">
+                  {/* সেফটি চেক: যদি নাম না থাকে তবে ইমেইল বা Unknown দেখাবে */}
+                  {post.profiles?.full_name ||
+                    post.profiles?.email ||
+                    "Unknown Author"}
+                </span>
+                <span className="text-xs">Author</span>
+              </div>
+            </div>
+            <div className="flex items-center gap-2 text-sm">
+              <Calendar className="h-4 w-4" />
+              <span>{new Date(post.created_at).toLocaleDateString()}</span>
+            </div>
+          </div>
+        </div>
+
+        {post.image_url && (
+          <div className="relative w-full h-[300px] md:h-[500px] rounded-2xl overflow-hidden shadow-2xl border border-border/50">
+            <img
+              src={post.image_url}
+              alt={post.title}
+              className="w-full h-full object-cover"
+            />
+          </div>
+        )}
+
+        <div className="prose prose-lg dark:prose-invert max-w-none leading-relaxed text-foreground/90">
+          <p className="whitespace-pre-wrap">{post.content}</p>
+        </div>
+      </motion.div>
+    </div>
+  );
+}
