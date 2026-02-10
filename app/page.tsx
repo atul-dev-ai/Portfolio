@@ -8,22 +8,22 @@ import ContactSection from "@/components/ui/contact-section";
 export default function Home() {
   return (
     <main className="min-h-screen bg-background text-foreground selection:bg-primary selection:text-primary-foreground">
-      {/* হিরো সেকশন */}
+      {/* Hero Section */}
       <HeroSection />
 
-      {/* বায়ো সেকশন */}
+      {/* Bio Section */}
       <BioSection />
 
-      {/* ২. এখানে কম্পোনেন্টটি কল করা হয়েছে (এটি মিস হলে দেখাবে না) */}
+      {/* Education Section */}
       <EducationSection />
 
-      {/* স্কিল সেকশন */}
+      {/* Skill section  */}
       <Skills />
 
-      {/* প্রজেক্ট সেকশন */}
+      {/* Project section */}
       <ProjectsSection />
 
-      {/* কন্টাক্ট সেকশন */}
+      {/* Contact Section */}
       <ContactSection />
     </main>
   );

@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { ThemeProvider } from "@/components/ui/theme-provider";
+//client loader for preloading in client side
+import ClientLoader from "@/components/ui/ClientLoader";
 import Navbar from "@/components/ui/navbar";
 import Footer from "@/components/ui/Footer";
 import { Toaster } from "@/components/ui/sonner";
@@ -81,12 +84,14 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <Navbar />
-          {children}
+          <ClientLoader>
+            <Navbar />
+            {children}
 
-          <Toaster />
-          <Footer />
-          <Analytics />
+            <Toaster />
+            <Footer />
+            <Analytics />
+          </ClientLoader>
           <SpeedInsights />
         </ThemeProvider>
       </body>

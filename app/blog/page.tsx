@@ -1,131 +1,77 @@
-"use client";
-
-import { useEffect, useState } from "react";
-import { supabase } from "@/lib/supabaseClient";
-import { Loader2, Calendar, User, ArrowRight, ImageIcon } from "lucide-react";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { createClient } from "@/utils/supabase/server";
 import Link from "next/link";
 
-export default function BlogPage() {
-  const [posts, setPosts] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+export const dynamic = "force-dynamic";
 
-useEffect(() => {
-  const fetchPosts = async () => {
-    // লোডিং শুরু
-    const { data, error } = await supabase
-      .from("posts")
-      .select("*, profiles(full_name)")
-      .eq("status", "approved") // এখানে কমা হবে না
-      .order("created_at", { ascending: false }) // আগে সর্ট করুন (লেটেস্ট পোস্ট)
-      .limit(20); // শেষে লিমিট এবং সেমিকোলন
+export default async function BlogPage() {
+  const supabase = await createClient();
 
-    if (!error) {
-      setPosts(data || []);
-    }
-    setLoading(false);
-  };
+  // 🔥 অপটিমাইজেশন: content বাদ দিয়ে শুধু প্রয়োজনীয় তথ্য আনা হচ্ছে
+  const { data: posts, error } = await supabase
+    .from("posts")
+    .select("id, title, created_at, image_url, content") // content আনছি প্রিভিউয়ের জন্য, তবে লিমিট দিচ্ছি
+    .order("created_at", { ascending: false })
+    .limit(12); // 🚀 একসাথে মাত্র ১২টা পোস্ট লোড হবে, তাই সুপার ফাস্ট হবে
 
-  fetchPosts();
-}, []);
-  if (loading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center">
-        <Loader2 className="h-10 w-10 animate-spin text-primary" />
-      </div>
-    );
+  if (error) {
+    console.log("Supabase Error:", error.message);
   }
 
-  return (
-    <div className="container mx-auto py-28 px-4">
-      <div className="text-center mb-12 space-y-4">
-        <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl">
-          Latest Writings
-        </h1>
-        <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-          Thoughts, ideas, and stories from our community.
-        </p>
-      </div>
+  // কন্টেন্টের ছোট প্রিভিউ তৈরি (প্রথম ১০০ অক্ষর)
+  const getExcerpt = (text: string) => {
+    if (!text) return "";
+    return text.length > 100 ? text.substring(0, 100) + "..." : text;
+  };
 
-      {posts.length === 0 ? (
-        <div className="text-center py-20 bg-muted/30 rounded-lg border border-dashed">
-          <p className="text-xl text-muted-foreground">
-            No posts published yet.
-          </p>
-        </div>
-      ) : (
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {posts.map((post) => (
-            <Card
+  return (
+    <div className="container mx-auto px-6 py-32 min-h-screen">
+      <div className="max-w-6xl mx-auto space-y-8">
+        <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
+          Latest <span className="text-primary">Articles</span>
+        </h1>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {posts?.map((post) => (
+            <Link
               key={post.id}
-              className="flex flex-col overflow-hidden hover:shadow-lg transition-all duration-300 group border-border/50"
+              href={`/blog/${post.id}`}
+              className="group flex flex-col border border-white/10 bg-white/5 rounded-xl overflow-hidden hover:bg-white/10 transition-all hover:shadow-xl hover:-translate-y-1"
             >
-              {/* --- IMAGE SECTION --- */}
-              <div className="relative h-48 w-full bg-muted overflow-hidden">
+              {/* ইমেজ সেকশন */}
+              <div className="relative w-full h-48 bg-gray-900 overflow-hidden">
                 {post.image_url ? (
                   <img
                     src={post.image_url}
                     alt={post.title}
-                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    loading="lazy" // 🚀 ইমেজ লেজি লোড হবে
                   />
                 ) : (
-                  <div className="flex h-full w-full items-center justify-center bg-secondary/50">
-                    <ImageIcon className="h-10 w-10 text-muted-foreground/50" />
+                  <div className="flex items-center justify-center h-full text-gray-600">
+                    No Image
                   </div>
                 )}
-                <div className="absolute top-4 right-4">
-                  <Badge className="bg-background/80 text-foreground hover:bg-background backdrop-blur-sm">
-                    {post.category || "General"}
-                  </Badge>
-                </div>
               </div>
 
-              {/* --- CONTENT SECTION --- */}
-              <CardHeader className="space-y-2 p-6">
-                <div className="flex items-center gap-4 text-xs text-muted-foreground">
-                  <div className="flex items-center gap-1">
-                    <Calendar className="h-3 w-3" />
-                    {new Date(post.created_at).toLocaleDateString()}
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <User className="h-3 w-3" />
-                    {post.profiles?.full_name || "Unknown"}
-                  </div>
-                </div>
-                <h3 className="text-xl font-bold leading-tight group-hover:text-primary transition-colors line-clamp-2">
+              <div className="p-6 flex flex-col flex-1">
+                <h2 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors line-clamp-2">
                   {post.title}
-                </h3>
-              </CardHeader>
-
-              <CardContent className="p-6 pt-0 flex-1">
-                <p className="text-muted-foreground line-clamp-3 text-sm leading-relaxed">
-                  {post.content}
+                </h2>
+                <p className="text-sm text-gray-400 line-clamp-3 mb-4 flex-1">
+                  {getExcerpt(post.content)}
                 </p>
-              </CardContent>
-
-              <CardFooter className="p-6 pt-0">
-                <Button
-                  variant="outline"
-                  className="w-full gap-2 group-hover:border-primary/50 group-hover:bg-primary/5"
-                  asChild
-                >
-                  <Link href={`/blog/${post.id}`}>
-                    Read More{" "}
-                    <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                  </Link>
-                </Button>
-              </CardFooter>
-            </Card>
+                <span className="text-xs font-medium text-primary flex items-center gap-1 mt-auto">
+                  Read Article <span>→</span>
+                </span>
+              </div>
+            </Link>
           ))}
         </div>
-      )}
+
+        {(!posts || posts.length === 0) && (
+          <p className="text-center text-gray-500 py-10">No posts found.</p>
+        )}
+      </div>
     </div>
   );
 }
