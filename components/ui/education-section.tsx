@@ -48,7 +48,7 @@ export default function EducationSection() {
   const scaleY = useTransform(scrollYProgress, [0, 1], [0, 1]);
 
   return (
-    <section id="education" className="container mx-auto px-6 md:px-12 py-16">
+    <section id="education-section" className="container mx-auto px-6 md:px-12 py-16">
       <div className="flex flex-col items-center mb-16 space-y-4 text-center">
         <div className="inline-flex items-center px-3 py-1 rounded-full border border-primary/20 bg-primary/5 text-primary text-sm font-medium animate-bounce">
           <GraduationCap className="w-4 h-4 mr-2 animate-pulse" />
