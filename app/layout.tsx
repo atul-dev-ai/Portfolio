@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Suspense } from "react"; // ✅ ১. Suspense ইমপোর্ট
+import Tracker from "@/components/Tracker";
 
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
@@ -88,6 +89,7 @@ export default function RootLayout({
             <ClientLoader>
               {/* Navbar আগেই ঠিক করা হয়েছে, তবুও সেইফটির জন্য এখানে থাকলো */}
               <Navbar />
+              <Tracker />
 
               {children}
 
