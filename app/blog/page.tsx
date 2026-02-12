@@ -1,77 +1,72 @@
-import { createClient } from "@/utils/supabase/server";
-import Link from "next/link";
+"use client";
+import React from "react";
+import { motion } from "framer-motion";
 
-export const dynamic = "force-dynamic";
-
-export default async function BlogPage() {
-  const supabase = await createClient();
-
-  // 🔥 অপটিমাইজেশন: content বাদ দিয়ে শুধু প্রয়োজনীয় তথ্য আনা হচ্ছে
-  const { data: posts, error } = await supabase
-    .from("posts")
-    .select("id, title, created_at, image_url, content") // content আনছি প্রিভিউয়ের জন্য, তবে লিমিট দিচ্ছি
-    .order("created_at", { ascending: false })
-    .limit(12); // 🚀 একসাথে মাত্র ১২টা পোস্ট লোড হবে, তাই সুপার ফাস্ট হবে
-
-  if (error) {
-    console.log("Supabase Error:", error.message);
-  }
-
-  // কন্টেন্টের ছোট প্রিভিউ তৈরি (প্রথম ১০০ অক্ষর)
-  const getExcerpt = (text: string) => {
-    if (!text) return "";
-    return text.length > 100 ? text.substring(0, 100) + "..." : text;
-  };
-
+export default function BlogMaintenance() {
   return (
-    <div className="container mx-auto px-6 py-32 min-h-screen">
-      <div className="max-w-6xl mx-auto space-y-8">
-        <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
-          Latest <span className="text-primary">Articles</span>
-        </h1>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {posts?.map((post) => (
-            <Link
-              key={post.id}
-              href={`/blog/${post.id}`}
-              className="group flex flex-col border border-white/10 bg-white/5 rounded-xl overflow-hidden hover:bg-white/10 transition-all hover:shadow-xl hover:-translate-y-1"
-            >
-              {/* ইমেজ সেকশন */}
-              <div className="relative w-full h-48 bg-gray-900 overflow-hidden">
-                {post.image_url ? (
-                  <img
-                    src={post.image_url}
-                    alt={post.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    loading="lazy" // 🚀 ইমেজ লেজি লোড হবে
-                  />
-                ) : (
-                  <div className="flex items-center justify-center h-full text-gray-600">
-                    No Image
-                  </div>
-                )}
-              </div>
-
-              <div className="p-6 flex flex-col flex-1">
-                <h2 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors line-clamp-2">
-                  {post.title}
-                </h2>
-                <p className="text-sm text-gray-400 line-clamp-3 mb-4 flex-1">
-                  {getExcerpt(post.content)}
-                </p>
-                <span className="text-xs font-medium text-primary flex items-center gap-1 mt-auto">
-                  Read Article <span>→</span>
-                </span>
-              </div>
-            </Link>
-          ))}
-        </div>
-
-        {(!posts || posts.length === 0) && (
-          <p className="text-center text-gray-500 py-10">No posts found.</p>
-        )}
+    <div className="min-h-screen bg-[#000000] mt-8 flex items-center justify-center overflow-hidden relative">
+      {/* Apple Style Animated Glow Background */}
+      <div className="absolute inset-0 z-0">
+        <motion.div
+          animate={{
+            scale: [1, 1.2, 1],
+            opacity: [0.3, 0.6, 0.3],
+          }}
+          transition={{
+            duration: 8,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-blue-600 rounded-full blur-[120px]"
+        />
+        <motion.div
+          animate={{
+            scale: [1.2, 1, 1.2],
+            opacity: [0.2, 0.5, 0.2],
+          }}
+          transition={{
+            duration: 10,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-purple-600 rounded-full blur-[100px] ml-20"
+        />
       </div>
+
+      {/* Main Content Card */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1 }}
+        className="relative z-10 text-center px-6"
+      >
+        <div className="bg-white/5 backdrop-blur-2xl border border-white/10 p-12 rounded-[40px] shadow-2xl max-w-2xl mx-auto">
+          {/* Pulsating Icon */}
+          <motion.div
+            animate={{ scale: [1, 1.1, 1] }}
+            transition={{ duration: 2, repeat: Infinity }}
+            className="w-20 h-20 bg-gradient-to-tr from-blue-500 to-purple-500 rounded-2xl mx-auto mb-8 flex items-center justify-center shadow-[0_0_30px_rgba(59,130,246,0.5)]"
+          >
+            <span className="text-3xl">🚀</span>
+          </motion.div>
+
+          <h1 className="text-5xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-white to-gray-500 tracking-tight mb-4">
+            Blog is on its way.
+          </h1>
+
+          <p className="text-xl text-gray-400 font-light tracking-wide max-w-md mx-auto leading-relaxed">
+            We're currently under maintenance to bring you a brand new
+            experience. Stay tuned for the big reveal.
+          </p>
+
+          <div className="mt-10 flex flex-col items-center gap-4">
+            <div className="h-[1px] w-24 bg-gradient-to-r from-transparent via-gray-600 to-transparent"></div>
+            <p className="text-xs uppercase tracking-[0.3em] text-blue-500 font-semibold animate-pulse">
+              Coming Soon
+            </p>
+          </div>
+        </div>
+      </motion.div>
     </div>
   );
 }

@@ -1,258 +1,117 @@
-"use client";
+'use client';
+import { useEffect, useState } from 'react';
+import { createClient } from '@supabase/supabase-js';
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { supabase } from "@/lib/supabaseClient";
-import { toast } from "sonner";
-import {
-  CheckCircle,
-  XCircle,
-  Loader2,
-  ShieldAlert,
-  Eye,
-  Calendar,
-  User,
-  ImageIcon,
-} from "lucide-react";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-  DialogDescription,
-} from "@/components/ui/dialog";
+// সুপাবেস কানেকশন
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+);
 
-export default function AdminDashboard() {
-  const [posts, setPosts] = useState<any[]>([]);
+export default function AdminPage() {
+  const [posts, setPosts] = useState([]);
+  const [activeTab, setActiveTab] = useState('pending'); // ডিফল্ট ট্যাব 'pending'
   const [loading, setLoading] = useState(true);
-  const router = useRouter();
 
+  // পেজ লোড হলেই ডাটা আনবে (কোনো চেক বা রিডাইরেক্ট নেই)
   useEffect(() => {
-    const initAdmin = async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      if (!user) {
-        router.push("/login");
-        return;
-      }
+    fetchPosts(activeTab);
+  }, [activeTab]);
 
-      const [profileReq, postsReq] = await Promise.all([
-        supabase.from("profiles").select("role").eq("id", user.id).single(),
-        supabase
-          .from("posts")
-          .select("*, profiles(full_name, email)")
-          .eq("status", "pending")
-          .order("created_at", { ascending: false }),
-      ]);
+  const fetchPosts = async (status) => {
+    setLoading(true);
+    const { data, error } = await supabase
+      .from('posts')
+      .select('*')
+      .eq('status', status)
+      .order('created_at', { ascending: false });
 
-      if (profileReq.data?.role !== "admin") {
-        router.push("/");
-        return;
-      }
-
-      setPosts(postsReq.data || []);
-      setLoading(false);
-    };
-
-    initAdmin();
-  }, [router]);
-
-  const handleAction = async (
-    postId: string,
-    status: "approved" | "rejected",
-  ) => {
-   const promise = Promise.resolve(
-     supabase.from("posts").update({ status }).eq("id", postId),
-   );
-    toast.promise(promise, {
-      loading: "Processing...",
-      success: () => {
-        setPosts(posts.filter((p) => p.id !== postId));
-        return `Post ${status}!`;
-      },
-      error: "Error updating post",
-    });
+    if (error) console.log(error);
+    else setPosts(data || []);
+    setLoading(false);
   };
 
-  if (loading)
-    return (
-      <div className="flex h-screen items-center justify-center">
-        <Loader2 className="h-10 w-10 animate-spin text-primary" />
-      </div>
-    );
+  // অ্যাপ্রুভ বাটন ফাংশন
+  const handleApprove = async (id) => {
+    await supabase.from('posts').update({ status: 'approved' }).eq('id', id);
+    fetchPosts(activeTab); // রিফ্রেশ
+    alert("Post Approved!");
+  };
+
+  // ডিলিট বাটন ফাংশন
+  const handleDelete = async (id) => {
+    if(!confirm("Are you sure you want to delete?")) return;
+    await supabase.from('posts').delete().eq('id', id);
+    fetchPosts(activeTab); // রিফ্রেশ
+    alert("Post Deleted!");
+  };
 
   return (
-    <div className="container mx-auto py-28 px-4">
-      <Card>
-        <CardHeader>
-          <div className="flex items-center gap-2">
-            <ShieldAlert className="h-6 w-6 text-red-500" />
-            <CardTitle>Admin Approval Panel</CardTitle>
+    <div className="min-h-screen bg-gray-900 text-white p-8">
+      <div className="max-w-6xl mx-auto">
+        <h1 className="text-3xl font-bold mb-8 text-blue-400">Admin Dashboard</h1>
+
+        {/* --- Tabs (Pending & Approved) --- */}
+        <div className="flex space-x-6 mb-8 border-b border-gray-700">
+          <button 
+            onClick={() => setActiveTab('pending')}
+            className={`pb-2 px-4 font-bold text-lg transition ${activeTab === 'pending' ? 'border-b-4 border-yellow-500 text-yellow-400' : 'text-gray-400 hover:text-white'}`}
+          >
+            Pending Requests
+          </button>
+          <button 
+            onClick={() => setActiveTab('approved')}
+            className={`pb-2 px-4 font-bold text-lg transition ${activeTab === 'approved' ? 'border-b-4 border-green-500 text-green-400' : 'text-gray-400 hover:text-white'}`}
+          >
+            Published Posts
+          </button>
+        </div>
+
+        {/* --- Post List --- */}
+        {loading ? (
+          <p className="text-gray-400">Loading...</p>
+        ) : (
+          <div className="space-y-4">
+            {posts.length === 0 ? (
+              <div className="text-gray-500 py-10 text-center bg-gray-800 rounded">
+                No posts found in {activeTab}.
+              </div>
+            ) : (
+              posts.map((post) => (
+                <div key={post.id} className="bg-gray-800 p-5 rounded-lg border border-gray-700 flex justify-between items-center shadow-lg">
+                  <div>
+                    <h3 className="text-xl font-bold text-white">{post.title}</h3>
+                    <p className="text-sm text-gray-400 mt-1">{new Date(post.created_at).toDateString()}</p>
+                    <span className={`text-xs px-2 py-1 rounded mt-2 inline-block font-bold ${post.status === 'approved' ? 'bg-green-900 text-green-300' : 'bg-yellow-900 text-yellow-300'}`}>
+                      {post.status.toUpperCase()}
+                    </span>
+                  </div>
+                  
+                  <div className="flex gap-3">
+                    {/* Approve Button (Only in Pending Tab) */}
+                    {activeTab === 'pending' && (
+                      <button 
+                        onClick={() => handleApprove(post.id)} 
+                        className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded font-bold"
+                      >
+                        Approve
+                      </button>
+                    )}
+
+                    {/* Delete Button (Always Visible) */}
+                    <button 
+                      onClick={() => handleDelete(post.id)} 
+                      className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded font-bold"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              ))
+            )}
           </div>
-          <CardDescription>Pending Review: {posts.length}</CardDescription>
-        </CardHeader>
-        <CardContent>
-          {posts.length === 0 ? (
-            <div className="text-center py-10 text-muted-foreground border border-dashed rounded-lg">
-              <CheckCircle className="h-10 w-10 mx-auto mb-2 text-green-500" />
-              <p>No pending posts found.</p>
-            </div>
-          ) : (
-            <div className="border rounded-md">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Image</TableHead> {/* নতুন কলাম */}
-                    <TableHead>Title</TableHead>
-                    <TableHead>Author</TableHead>
-                    <TableHead>Category</TableHead>
-                    <TableHead className="text-right">Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {posts.map((post) => (
-                    <TableRow key={post.id}>
-                      {/* --- IMAGE THUMBNAIL COLUMN --- */}
-                      <TableCell>
-                        {post.image_url ? (
-                          <div className="h-12 w-20 rounded-md overflow-hidden border bg-muted">
-                            <img
-                              src={post.image_url}
-                              alt="Thumbnail"
-                              className="h-full w-full object-cover hover:scale-110 transition-transform duration-200"
-                            />
-                          </div>
-                        ) : (
-                          <div className="h-12 w-20 rounded-md bg-muted flex items-center justify-center text-muted-foreground border">
-                            <ImageIcon className="h-5 w-5 opacity-50" />
-                          </div>
-                        )}
-                      </TableCell>
-
-                      <TableCell className="font-medium">
-                        {post.title}
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex flex-col">
-                          <span className="text-sm">
-                            {post.profiles?.full_name}
-                          </span>
-                          <span className="text-xs text-muted-foreground">
-                            {post.profiles?.email}
-                          </span>
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <Badge variant="outline">{post.category}</Badge>
-                      </TableCell>
-
-                      <TableCell className="text-right">
-                        <div className="flex items-center justify-end gap-2">
-                          {/* VIEW MODAL (WITH LARGE IMAGE) */}
-                          <Dialog>
-                            <DialogTrigger asChild>
-                              <Button
-                                variant="ghost"
-                                size="icon"
-                                className="text-blue-500 hover:text-blue-600 hover:bg-blue-50"
-                              >
-                                <Eye className="h-4 w-4" />
-                              </Button>
-                            </DialogTrigger>
-                            <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
-                              <DialogHeader>
-                                <DialogTitle>{post.title}</DialogTitle>
-                                <DialogDescription className="flex gap-4 pt-2">
-                                  <Badge>{post.category}</Badge>
-                                  <span className="flex items-center gap-1 text-xs">
-                                    <User className="h-3 w-3" />{" "}
-                                    {post.profiles?.full_name}
-                                  </span>
-                                </DialogDescription>
-                              </DialogHeader>
-
-                              <div className="space-y-4 mt-4">
-                                {post.image_url ? (
-                                  <img
-                                    src={post.image_url}
-                                    alt="Post Cover"
-                                    className="w-full rounded-lg border shadow-sm max-h-[400px] object-cover"
-                                  />
-                                ) : (
-                                  <div className="w-full h-32 bg-muted rounded-lg flex items-center justify-center text-muted-foreground border border-dashed">
-                                    No cover image provided
-                                  </div>
-                                )}
-                                <p className="whitespace-pre-wrap text-sm leading-relaxed text-foreground/80">
-                                  {post.content}
-                                </p>
-                              </div>
-
-                              <div className="flex justify-end gap-2 mt-6 border-t pt-4">
-                                <Button
-                                  variant="destructive"
-                                  onClick={() =>
-                                    handleAction(post.id, "rejected")
-                                  }
-                                >
-                                  Reject
-                                </Button>
-                                <Button
-                                  className="bg-green-600 hover:bg-green-700"
-                                  onClick={() =>
-                                    handleAction(post.id, "approved")
-                                  }
-                                >
-                                  Approve
-                                </Button>
-                              </div>
-                            </DialogContent>
-                          </Dialog>
-
-                          <Button
-                            variant="outline"
-                            size="icon"
-                            className="text-red-500 hover:bg-red-50"
-                            onClick={() => handleAction(post.id, "rejected")}
-                          >
-                            <XCircle className="h-4 w-4" />
-                          </Button>
-                          <Button
-                            size="icon"
-                            className="bg-green-600 hover:bg-green-700"
-                            onClick={() => handleAction(post.id, "approved")}
-                          >
-                            <CheckCircle className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </div>
-          )}
-        </CardContent>
-      </Card>
+        )}
+      </div>
     </div>
   );
 }

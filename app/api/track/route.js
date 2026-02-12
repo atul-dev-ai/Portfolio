@@ -1,29 +1,27 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
-import {UAParser} from "ua-parser-js";
+import { UAParser } from "ua-parser-js";
 
-// সুপাবেস ক্লায়েন্ট কনফিগারেশন
+// পরিবর্তন: এখন আমরা সার্ভিস রোল কি ব্যবহার করছি (এটি সুপার পাওয়ার!)
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+  process.env.SUPABASE_SERVICE_ROLE_KEY, // <--- এই লাইনটি খেয়াল করুন
 );
 
 export async function POST(request) {
   try {
     const body = await request.json();
 
-    // ১. হেডার থেকে ইউজার ইনফো নেওয়া
     const userAgent = request.headers.get("user-agent") || "";
     const ip = request.headers.get("x-forwarded-for") || "Unknown";
     const country = request.headers.get("x-vercel-ip-country") || "Unknown";
     const city = request.headers.get("x-vercel-ip-city") || "Unknown";
 
-    // ২. ব্রাউজার এবং ওএস ডিটেক্ট করা
     const parser = new UAParser(userAgent);
     const result = parser.getResult();
 
-    // ৩. ডাটাবেসে ইনসার্ট করা
-    const { data, error } = await supabase.from("visits").insert({
+    // সার্ভিস রোল থাকায় RLS বাইপাস করে সরাসরি ইনসার্ট হবে
+    const { error } = await supabase.from("visits").insert({
       country: country,
       city: city,
       browser: result.browser.name || "Unknown",
@@ -40,7 +38,6 @@ export async function POST(request) {
 
     return NextResponse.json({ success: true });
   } catch (err) {
-    console.error("Server Error:", err);
     return NextResponse.json(
       { error: "Internal Server Error" },
       { status: 500 },
