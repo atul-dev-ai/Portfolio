@@ -1,116 +1,164 @@
-'use client';
-import { useEffect, useState } from 'react';
-import { createClient } from '@supabase/supabase-js';
+"use client";
 
-// সুপাবেস কানেকশন
+import { useEffect, useState } from "react";
+import { createClient } from "@supabase/supabase-js";
+import { motion, AnimatePresence } from "framer-motion";
+
+// ১. এরর ফিক্স: ভেরিয়েবলের শেষে '!' ব্যবহার করা হয়েছে
 const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
 );
 
-export default function AdminPage() {
-  const [posts, setPosts] = useState([]);
-  const [activeTab, setActiveTab] = useState('pending'); // ডিফল্ট ট্যাব 'pending'
-  const [loading, setLoading] = useState(true);
+// ২. ডাটার টাইপ ডিফাইন করা (TypeScript Interface)
+interface Post {
+  id: string;
+  title: string;
+  status: string;
+  created_at: string;
+}
 
-  // পেজ লোড হলেই ডাটা আনবে (কোনো চেক বা রিডাইরেক্ট নেই)
+export default function AdminPage() {
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [activeTab, setActiveTab] = useState<string>("pending");
+  const [loading, setLoading] = useState<boolean>(true);
+
   useEffect(() => {
     fetchPosts(activeTab);
   }, [activeTab]);
 
-  const fetchPosts = async (status) => {
+  // প্যারামিটার টাইপ (status: string) ফিক্স করা হয়েছে
+  const fetchPosts = async (status: string) => {
     setLoading(true);
     const { data, error } = await supabase
-      .from('posts')
-      .select('*')
-      .eq('status', status)
-      .order('created_at', { ascending: false });
+      .from("posts")
+      .select("*")
+      .eq("status", status)
+      .order("created_at", { ascending: false });
 
-    if (error) console.log(error);
-    else setPosts(data || []);
+    if (error) {
+      console.error(error.message);
+    } else {
+      setPosts((data as Post[]) || []);
+    }
     setLoading(false);
   };
 
-  // অ্যাপ্রুভ বাটন ফাংশন
-  const handleApprove = async (id) => {
-    await supabase.from('posts').update({ status: 'approved' }).eq('id', id);
-    fetchPosts(activeTab); // রিফ্রেশ
-    alert("Post Approved!");
+  const handleApprove = async (id: string) => {
+    const { error } = await supabase
+      .from("posts")
+      .update({ status: "approved" })
+      .eq("id", id);
+
+    if (!error) {
+      alert("Post Approved! ✅");
+      fetchPosts(activeTab);
+    }
   };
 
-  // ডিলিট বাটন ফাংশন
-  const handleDelete = async (id) => {
-    if(!confirm("Are you sure you want to delete?")) return;
-    await supabase.from('posts').delete().eq('id', id);
-    fetchPosts(activeTab); // রিফ্রেশ
-    alert("Post Deleted!");
+  const handleDelete = async (id: string) => {
+    if (!confirm("Are you sure?")) return;
+    const { error } = await supabase.from("posts").delete().eq("id", id);
+
+    if (!error) {
+      alert("Post Deleted! 🗑️");
+      fetchPosts(activeTab);
+    }
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-8">
-      <div className="max-w-6xl mx-auto">
-        <h1 className="text-3xl font-bold mb-8 text-blue-400">Admin Dashboard</h1>
+    <div className="min-h-screen bg-black mt-15 text-white p-6 md:p-12 relative overflow-hidden">
+      {/* Background Glow Effect */}
+      <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-[120px] pointer-events-none"></div>
 
-        {/* --- Tabs (Pending & Approved) --- */}
-        <div className="flex space-x-6 mb-8 border-b border-gray-700">
-          <button 
-            onClick={() => setActiveTab('pending')}
-            className={`pb-2 px-4 font-bold text-lg transition ${activeTab === 'pending' ? 'border-b-4 border-yellow-500 text-yellow-400' : 'text-gray-400 hover:text-white'}`}
-          >
-            Pending Requests
-          </button>
-          <button 
-            onClick={() => setActiveTab('approved')}
-            className={`pb-2 px-4 font-bold text-lg transition ${activeTab === 'approved' ? 'border-b-4 border-green-500 text-green-400' : 'text-gray-400 hover:text-white'}`}
-          >
-            Published Posts
-          </button>
+      <div className="max-w-5xl mx-auto relative z-10">
+        <header className="mb-12">
+          <h1 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-white to-gray-500 tracking-tighter">
+            Management
+          </h1>
+          <p className="text-gray-500 mt-2 font-light tracking-[0.2em] uppercase text-[10px]">
+            Administrative Control Center
+          </p>
+        </header>
+
+        {/* --- Tabs --- */}
+        <div className="flex space-x-2 mb-10 bg-white/[0.03] p-1.5 rounded-2xl w-fit border border-white/10 backdrop-blur-3xl shadow-2xl">
+          {["pending", "approved"].map((tab) => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              className={`px-8 py-2.5 rounded-xl font-semibold transition-all duration-500 capitalize ${activeTab === tab ? "bg-white text-black shadow-lg" : "text-gray-500 hover:text-white"}`}
+            >
+              {tab}
+            </button>
+          ))}
         </div>
 
         {/* --- Post List --- */}
-        {loading ? (
-          <p className="text-gray-400">Loading...</p>
-        ) : (
-          <div className="space-y-4">
-            {posts.length === 0 ? (
-              <div className="text-gray-500 py-10 text-center bg-gray-800 rounded">
-                No posts found in {activeTab}.
+        <div className="grid gap-4">
+          <AnimatePresence mode="wait">
+            {loading ? (
+              <motion.div
+                key="loading"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="text-gray-600 tracking-widest uppercase text-xs animate-pulse py-10"
+              >
+                Syncing with Database...
+              </motion.div>
+            ) : posts.length === 0 ? (
+              <div
+                key="empty"
+                className="bg-white/[0.02] border border-white/5 p-20 rounded-[40px] text-center"
+              >
+                <p className="text-gray-600 font-light text-xl italic tracking-tight">
+                  No records found in {activeTab}.
+                </p>
               </div>
             ) : (
               posts.map((post) => (
-                <div key={post.id} className="bg-gray-800 p-5 rounded-lg border border-gray-700 flex justify-between items-center shadow-lg">
-                  <div>
-                    <h3 className="text-xl font-bold text-white">{post.title}</h3>
-                    <p className="text-sm text-gray-400 mt-1">{new Date(post.created_at).toDateString()}</p>
-                    <span className={`text-xs px-2 py-1 rounded mt-2 inline-block font-bold ${post.status === 'approved' ? 'bg-green-900 text-green-300' : 'bg-yellow-900 text-yellow-300'}`}>
-                      {post.status.toUpperCase()}
-                    </span>
+                <motion.div
+                  layout
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  key={post.id}
+                  className="bg-white/[0.02] backdrop-blur-3xl border border-white/10 p-6 md:p-8 rounded-[30px] flex flex-col md:flex-row justify-between items-start md:items-center group hover:bg-white/[0.04] transition-all duration-500 shadow-2xl"
+                >
+                  <div className="mb-5 md:mb-0">
+                    <h3 className="text-2xl font-semibold text-white tracking-tight mb-2">
+                      {post.title}
+                    </h3>
+                    <div className="flex items-center gap-4">
+                      <p className="text-[10px] text-gray-500 font-medium uppercase tracking-widest bg-white/5 px-3 py-1 rounded-full">
+                        {new Date(post.created_at).toDateString()}
+                      </p>
+                      <span
+                        className={`w-2 h-2 rounded-full ${post.status === "approved" ? "bg-green-500" : "bg-yellow-500"}`}
+                      ></span>
+                    </div>
                   </div>
-                  
-                  <div className="flex gap-3">
-                    {/* Approve Button (Only in Pending Tab) */}
-                    {activeTab === 'pending' && (
-                      <button 
-                        onClick={() => handleApprove(post.id)} 
-                        className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded font-bold"
+                  <div className="flex gap-4 w-full md:w-auto">
+                    {activeTab === "pending" && (
+                      <button
+                        onClick={() => handleApprove(post.id)}
+                        className="flex-1 md:flex-none bg-white text-black px-8 py-3 rounded-2xl font-bold hover:scale-105 transition-all text-sm"
                       >
                         Approve
                       </button>
                     )}
-
-                    {/* Delete Button (Always Visible) */}
-                    <button 
-                      onClick={() => handleDelete(post.id)} 
-                      className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded font-bold"
+                    <button
+                      onClick={() => handleDelete(post.id)}
+                      className="flex-1 md:flex-none bg-red-500/10 text-red-500 border border-red-500/20 px-8 py-3 rounded-2xl font-bold hover:bg-red-500 hover:text-white transition-all text-sm"
                     >
                       Delete
                     </button>
                   </div>
-                </div>
+                </motion.div>
               ))
             )}
-          </div>
-        )}
+          </AnimatePresence>
+        </div>
       </div>
     </div>
   );
